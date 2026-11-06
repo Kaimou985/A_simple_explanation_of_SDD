@@ -10,6 +10,7 @@ const staticFiles = new Map([
   ['/', ['index.html', 'text/html; charset=utf-8']],
   ['/style.css', ['style.css', 'text/css; charset=utf-8']],
   ['/app.js', ['app.js', 'text/javascript; charset=utf-8']],
+  ['/learning.js', ['learning.js', 'text/javascript; charset=utf-8']],
   ['/example.js', ['example.js', 'text/javascript; charset=utf-8']]
 ]);
 const specPath = /^specs\/[a-z0-9]+(?:-[a-z0-9]+)*\/spec\.md$/;
@@ -67,13 +68,16 @@ function validateTurn(payload) {
 }
 
 function validateResult(result, previous) {
-  if (!isRecord(result) || typeof result.reply !== 'string' || !result.reply.trim() || result.reply.length > 6000 ||
-      !isRecord(result.updates) || !Object.entries(result.updates).every(([path, content]) =>
+  if (!isRecord(result) || typeof result.reply !== 'string' || !result.reply.trim() || result.reply.length > 6000) {
+    throw new RequestError(502, '模型未返回有效的回复，请重试。');
+  }
+  const { updates = {} } = result;
+  if (!isRecord(updates) || !Object.entries(updates).every(([path, content]) =>
         validPath(path) && (content === null ? specPath.test(path) && Object.hasOwn(previous, path) : validDocument(path, content)))) {
     throw new RequestError(502, '模型返回的文档不符合 OpenSpec 模板，请重试。');
   }
   const next = { ...previous };
-  for (const [path, content] of Object.entries(result.updates)) {
+  for (const [path, content] of Object.entries(updates)) {
     if (content === null) delete next[path];
     else next[path] = content;
   }
@@ -84,7 +88,7 @@ function validateResult(result, previous) {
   }
   return {
     reply: result.reply.trim(),
-    updates: Object.fromEntries(Object.entries(result.updates).filter(([path, content]) => previous[path] !== content))
+    updates: Object.fromEntries(Object.entries(updates).filter(([path, content]) => previous[path] !== content))
   };
 }
 

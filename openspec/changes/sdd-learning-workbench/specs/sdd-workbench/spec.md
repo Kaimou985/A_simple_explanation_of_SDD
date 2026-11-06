@@ -1,7 +1,22 @@
 ## ADDED Requirements
 
+### Requirement: 独立学习入口
+网站 SHALL 在顶部导航并列提供「学习 SDD」和「规范实验台」。「学习 SDD」包含中文短课，覆盖为什么需要 SDD、如何从需求走到验收，以及 Proposal、Specs、Design 和 Tasks 各自的用途和写作边界。
+
+#### Scenario: 无密钥学习 SDD
+- **WHEN** 未配置 DeepSeek 密钥的用户选择「学习 SDD」
+- **THEN** 用户可以在独立学习区浏览短课、查看四类产物的同案例示例并完成练习，课程和练习无需调用 DeepSeek
+
+#### Scenario: 答题后查看解释
+- **WHEN** 用户提交某类产物的练习答案
+- **THEN** 页面立即显示答案是否正确，并解释相关内容为什么适合写在这份文档或场景中
+
+#### Scenario: 从课程进入对应示例
+- **WHEN** 用户在某类产物的课程中选择「在实验台试一试」
+- **THEN** 网站打开月度销售分析示例，并定位到该课程对应的 Proposal、Specs、Design 或 Tasks 文档
+
 ### Requirement: 双栏教学工作区
-网站 SHALL 在同一工作区提供中文流程讲解、统一对话输入框及四类 OpenSpec 文档预览。
+「规范实验台」SHALL 在同一工作区提供中文流程提示、统一对话输入框及四类 OpenSpec 文档预览。
 
 #### Scenario: 从空白需求开始
 - **WHEN** 用户新建工作区并提交自定义工作需求

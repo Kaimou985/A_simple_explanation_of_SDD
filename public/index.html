@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="与 DeepSeek 一起把工作需求变成 OpenSpec 规范。">
+  <meta name="description" content="学习规范驱动开发，并在实验台把工作需求变成 OpenSpec 规范。">
   <title>SDD 实验台</title>
   <link rel="stylesheet" href="/style.css">
   <script type="module" src="/app.js"></script>
@@ -11,9 +11,36 @@
 <body>
   <header class="masthead">
     <a href="/" class="brand"><span class="brand-icon" aria-hidden="true">⌘</span><span>SDD 实验台<small>规范驱动开发</small></span></a>
-    <div class="header-actions"><span class="schema">OpenSpec / spec-driven</span><button id="load-example" class="quiet">打开示例</button><button id="new-workspace" class="outline">新建需求</button></div>
+    <nav class="site-nav" aria-label="主导航">
+      <a id="nav-learn" href="#learn">学习 SDD</a>
+      <a id="nav-workbench" href="#workbench" aria-current="page">规范实验台</a>
+    </nav>
+    <div id="workspace-actions" class="header-actions"><button id="load-example" class="quiet">打开示例</button><button id="new-workspace" class="outline">新建需求</button></div>
   </header>
-  <main class="workspace">
+  <main>
+  <section id="learning-view" class="learning" aria-labelledby="learning-title" hidden>
+    <header class="learning-intro">
+      <p class="eyebrow">SDD / 中文短课</p>
+      <h1 id="learning-title">学习规范驱动开发</h1>
+      <p>从「做一份月度销售报表」出发，练习把目标、业务规则、设计和任务分别写进 OpenSpec。</p>
+      <span class="badge updated">课程和练习无需 API 密钥</span>
+    </header>
+    <div class="learning-basics">
+      <article class="learning-card">
+        <p class="eyebrow">01 / 理解 SDD</p>
+        <h2>为什么先写规范</h2>
+        <p>一句「统计销售额」可能有多种解释。先约定统计粒度、退款口径和验收结果，评审时就有共同依据，修改时也能找到受影响的文档。</p>
+      </article>
+      <article class="learning-card">
+        <p class="eyebrow">02 / 理解流程</p>
+        <h2>从需求走到验收</h2>
+        <p>先用 Proposal 确认目标和范围，再用 Specs 约定行为、用 Design 说明实现方案。两者齐备后用 Tasks 安排实施和验收，逐项核对实际结果。</p>
+      </article>
+    </div>
+    <h2 class="course-title">03 / 写四份 OpenSpec 文档</h2>
+    <div id="learning-courses" class="learning-courses"></div>
+  </section>
+  <div id="workbench-view" class="workspace">
     <section class="panel conversation" aria-labelledby="conversation-title">
       <div class="panel-heading"><div><p class="eyebrow">01 / WORKFLOW</p><h1 id="conversation-title">流程与对话</h1></div><span id="mode" class="badge">连接状态加载中</span></div>
       <nav id="flow" class="flow" aria-label="OpenSpec 流程"></nav>
@@ -37,6 +64,7 @@
       </div>
       <div class="changes"><h3>本轮关联更新</h3><div id="changed-files" class="changed-files"></div></div>
     </section>
+  </div>
   </main>
 </body>
 </html>

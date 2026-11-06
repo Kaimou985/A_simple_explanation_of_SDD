@@ -1,4 +1,5 @@
 import { exampleDocuments, examplePath, exampleResult, exampleRevision } from './example.js';
+import { renderCourses } from './learning.js';
 
 const stages = [
   { id: 'proposal', name: 'Proposal', tab: 'proposal.md', title: '先说清为什么做', copy: '定义问题、范围和影响，记录这次变更涉及的能力。', command: '根据已确认的信息起草提案。' },
@@ -153,6 +154,7 @@ function draw() {
   $('mode').classList.toggle('updated', mode === 'example' || config.connected);
   $('load-example').disabled = busy;
   $('new-workspace').disabled = busy;
+  for (const shortcut of $('learning-courses').querySelectorAll('.course-example')) shortcut.disabled = busy;
   $('send').disabled = busy;
   input.readOnly = busy;
   const visibleHistory = history.length ? history : [{ role: 'assistant', content: '你想解决什么工作问题？描述你期待的结果，我们从变更提案开始。' }];
@@ -196,16 +198,42 @@ function startLive() {
   input.focus();
 }
 
-function openExample() {
+function openExample(targetStage = 'spec') {
+  if (busy) return;
   if (!switchMode('example')) return;
   documents = { ...exampleDocuments };
-  stage = tab = 'spec';
+  stage = tab = targetStage;
   specFile = examplePath;
   history = [
     { role: 'user', content: '帮我分析每月净销售额。' },
     { role: 'assistant', content: '已准备按月份汇总的四份 OpenSpec 草稿。试着提出按门店拆分，看看哪些规范要跟着改。' }
   ];
   draw();
+}
+
+function showView() {
+  const learning = window.location.hash === '#learn';
+  $('learning-view').hidden = !learning;
+  $('workbench-view').hidden = learning;
+  $('workspace-actions').hidden = learning;
+  $('nav-learn').removeAttribute('aria-current');
+  $('nav-workbench').removeAttribute('aria-current');
+  $(learning ? 'nav-learn' : 'nav-workbench').setAttribute('aria-current', 'page');
+  window.scrollTo(0, 0);
+}
+
+function openCourseExample(targetStage) {
+  if (mode === 'example') {
+    stage = tab = targetStage;
+    specFile = examplePath;
+    draw();
+  } else {
+    openExample(targetStage);
+    if (mode !== 'example') return;
+  }
+  window.location.hash = 'workbench';
+  showView();
+  $('nav-workbench').focus();
 }
 
 function applyTurn(message, result) {
@@ -265,7 +293,7 @@ $('composer').addEventListener('submit', async event => {
   } finally {
     busy = false;
     draw();
-    input.focus();
+    if (!$('workbench-view').hidden) input.focus();
   }
 });
 
@@ -273,8 +301,11 @@ input.addEventListener('keydown', event => {
   if (!event.isComposing && event.key === 'Enter' && (event.ctrlKey || event.metaKey)) $('composer').requestSubmit();
 });
 $('spec-picker').addEventListener('change', event => { specFile = event.target.value; drawPreview(); });
-$('load-example').addEventListener('click', openExample);
+$('load-example').addEventListener('click', () => openExample());
 $('new-workspace').addEventListener('click', startLive);
+renderCourses($('learning-courses'), openCourseExample);
+window.addEventListener('hashchange', showView);
+showView();
 draw();
 try {
   const response = await fetch('/api/config');
