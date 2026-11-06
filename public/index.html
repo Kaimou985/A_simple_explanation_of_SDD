@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="与 DeepSeek 一起把工作需求变成 OpenSpec 规范。">
+  <title>SDD 实验台</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a href="/" class="brand"><span class="brand-icon" aria-hidden="true">⌘</span><span>SDD 实验台<small>规范驱动开发</small></span></a>
+    <div class="header-actions"><span class="schema">OpenSpec / spec-driven</span><button id="load-example" class="quiet">打开示例</button><button id="new-workspace" class="outline">新建需求</button></div>
+  </header>
+  <main class="workspace">
+    <section class="panel conversation" aria-labelledby="conversation-title">
+      <div class="panel-heading"><div><p class="eyebrow">01 / WORKFLOW</p><h1 id="conversation-title">流程与对话</h1></div><span id="mode" class="badge">连接状态加载中</span></div>
+      <nav id="flow" class="flow" aria-label="OpenSpec 流程"></nav>
+      <div class="lesson"><span id="lesson-index" class="lesson-index" aria-hidden="true"></span><div><h2 id="lesson-title"></h2><p id="lesson-copy"></p></div></div>
+      <div id="messages" class="messages" role="log" aria-label="对话记录" aria-live="polite"></div>
+      <div id="suggestions" class="suggestions"></div>
+      <form id="composer" class="composer">
+        <label for="prompt" class="sr-only">需求或修改意见</label>
+        <textarea id="prompt" rows="2" maxlength="4000" placeholder="描述你的需求，或提出一项修改…"></textarea>
+        <button id="send" class="send" type="submit">发送 <span aria-hidden="true">↑</span></button>
+      </form>
+      <p id="feedback" class="feedback" role="status"></p>
+    </section>
+    <section class="panel artifacts" aria-labelledby="artifact-title">
+      <div class="panel-heading"><div><p class="eyebrow">02 / ARTIFACTS</p><h2 id="artifact-title">规范预览</h2></div><span id="artifact-count" class="badge"></span></div>
+      <nav id="tabs" class="tabs" aria-label="文档预览"></nav>
+      <div id="spec-picker-row" class="picker-row" hidden><label for="spec-picker">能力</label><select id="spec-picker"></select></div>
+      <div class="document">
+        <div class="document-bar"><code id="filename"></code><span id="document-status" class="badge"></span></div>
+        <div id="document-body" class="document-body" aria-label="Markdown 文档"></div>
+      </div>
+      <div class="changes"><h3>本轮关联更新</h3><div id="changed-files" class="changed-files"></div></div>
+    </section>
+  </main>
+</body>
+</html>

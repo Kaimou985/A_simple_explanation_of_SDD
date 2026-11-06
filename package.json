@@ -1,0 +1,7 @@
+{
+  "name": "sdd-learning-workbench",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "start": "node --env-file-if-exists=.env server.js" }
+}
